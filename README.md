@@ -1,2 +1,2 @@
 # Venom-Wrapper
-Msfvenom wrapper program
+Msfvenom wrapper
