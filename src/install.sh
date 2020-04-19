@@ -4,10 +4,10 @@
 # and will create a symbolic link to the
 # Vengen source file.
 
-git --version 2>&1/dev/null
+git --version 2>&1 >/dev/null
 git_version_status=$?
 
-if [ git_version_status -eq 0 ];
+if [ $git_version_status -eq 0 ];
 then
   git clone https://github.com/binexisHATT/Vengen.git
   sleep 3
