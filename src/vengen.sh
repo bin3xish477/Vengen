@@ -51,7 +51,7 @@ reverse_payload() {
 		more_options -p $PAYLOAD LHOST=$LOCALIP LPORT=$LOCALPORT -f $FORMAT
 	fi
 
-	read -p $'Save output to file? \e[31mY/n\e[0m' TOFILE
+	read -p $'Save output to file? \e[31mY/n\e[0m ' TOFILE
 	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
 
 	if [[ $TOFILE == "y" ]]; then
