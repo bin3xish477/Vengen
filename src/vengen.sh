@@ -102,7 +102,7 @@ to_file() {
 		read -p $'Overwrite file? \e[31mY/n\e[0m ' OVERWRITE
 		OVERWRITE=$(echo $OVERWRITE |tr '[:upper:]' '[:lower:]')
 
-		if [[ $OVERWRITE == "y" []; then
+		if [[ $OVERWRITE == "y" ]]; then
 			execute "$@" -o ${FILENAME}
 		else
 			exit 0
