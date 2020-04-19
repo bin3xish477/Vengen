@@ -78,7 +78,7 @@ bind_payload() {
 		more_options -p $PAYLOAD RHOST=$REMOTEIP RPORT=$REMOTEPORT -f $FORMAT
 	fi
 
-	read -p $'Save output to file? \e[31mY/n\e[0m' TOFILE
+	read -p $'Save output to file? \e[31mY/n\e[0m ' TOFILE
 	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
 
 	if [ $TOFILE = "y" ]; then
@@ -99,10 +99,10 @@ to_file() {
 	# execution of command.
 	if [ -e FILENAME ]; then
 		echo "File already exits!"
-		read -p $'Overwrite file? \e[31mY/n\e[0m' OVERWRITE
+		read -p $'Overwrite file? \e[31mY/n\e[0m ' OVERWRITE
 		OVERWRITE=$(echo $OVERWRITE |tr '[:upper:]' '[:lower:]')
 
-		if [ $OVERWRITE = "y"]; then
+		if [ $OVERWRITE = "y" ]; then
 			execute "$@" -o ${FILENAME}
 		else
 			exit 0
