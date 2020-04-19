@@ -82,7 +82,7 @@ bind_payload() {
 	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
 
 	if [[ $TOFILE == "y" ]]; then
-		to_file -p $REMOTEIP RHOST=$REMOTEPORT RHOST=$PAYLOAD -f $FORMAT
+		to_file -p $PAYLOAD RHOST=$REMOTEIP RPORT=$REMOTEPORT -f $FORMAT
 	else
 		execute -p $PAYLOAD RHOST=$REMOTEIP RPORT=$REMOTEPORT -f $FORMAT
 	fi
