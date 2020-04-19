@@ -124,7 +124,7 @@ more_options() {
 	"
 	echo "############################"
 
-	echo -ne "\e[31mEnter letter/s (Seperate with spaces)\e[0m: "
+	echo -ne "\e[31mEnter letter/s\e[0m (Seperate with spaces): "
 	# Reading elements seperated by spaces into an array.
 	read -a options
 
