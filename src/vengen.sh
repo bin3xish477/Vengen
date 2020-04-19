@@ -47,14 +47,14 @@ reverse_payload() {
 	# To lowercase
 	MOREOPTS=$(echo $MOREOPTS |tr '[:upper:]' '[:lower:]')
 
-	if [ $MOREOPTS = "y" ]; then
+	if [[ $MOREOPTS == "y" ]]; then
 		more_options -p $PAYLOAD LHOST=$LOCALIP LPORT=$LOCALPORT -f $FORMAT
 	fi
 
 	read -p $'Save output to file? \e[31mY/n\e[0m' TOFILE
 	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
 
-	if [ $TOFILE = "y" ]; then
+	if [[ $TOFILE == "y" ]]; then
 		to_file -p $PAYLOAD LHOST=$LOCALIP LPORT=$LOCALPORT -f $FORMAT
 	else
 		execute -p $PAYLOAD LHOST=$LOCALIP LPORT=$LOCALPORT -f $FORMAT
@@ -74,14 +74,14 @@ bind_payload() {
 
 	MOREOPTS=$(echo $MOREOPTS | tr '[:upper:]' '[:lower:]')
 
-	if [ $MOREOPTS = "y" ]; then
+	if [[ $MOREOPTS == "y" ]]; then
 		more_options -p $PAYLOAD RHOST=$REMOTEIP RPORT=$REMOTEPORT -f $FORMAT
 	fi
 
 	read -p $'Save output to file? \e[31mY/n\e[0m ' TOFILE
 	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
 
-	if [ $TOFILE = "y" ]; then
+	if [[ $TOFILE == "y" ]]; then
 		to_file -p $REMOTEIP RHOST=$REMOTEPORT RHOST=$PAYLOAD -f $FORMAT
 	else
 		execute -p $PAYLOAD RHOST=$REMOTEIP RPORT=$REMOTEPORT -f $FORMAT
@@ -102,7 +102,7 @@ to_file() {
 		read -p $'Overwrite file? \e[31mY/n\e[0m ' OVERWRITE
 		OVERWRITE=$(echo $OVERWRITE |tr '[:upper:]' '[:lower:]')
 
-		if [ $OVERWRITE = "y" ]; then
+		if [[ $OVERWRITE == "y" []; then
 			execute "$@" -o ${FILENAME}
 		else
 			exit 0
@@ -132,16 +132,16 @@ more_options() {
 	# Prompting user for value corresponding to
 	# option and appending flag and value to array.
 	for letter in ${options[@]}; do
-		if [ $letter = "e" ]; then
+		if [[ $letter == "e" ]]; then
 			read -p $'\e[31mENCODER\e[0m: ' ENCODER
 			array+=("--encoder" "$ENCODER")
-		elif [ $letter = "a" ]; then
+		elif [[ $letter == "a" ]]; then
 			read -p $'\e[31mARCHITECTURE\e[0m: ' ARCHITECTURE
 			array+=("--arch" "$ARCHITECTURE")
-		elif [ $letter = "p" ]; then
+		elif [[ $letter == "p" ]]; then
 			read -p $'\e[31mPLATFORM\e[0m: ' PLATFORM
 			array+=("--platform" "$PLATFORM")
-		elif [ $letter = "b" ]; then
+		elif [[ $letter == "b" ]]; then
 			read -p $'\e[31mBAD CHARACTERS\e[0m (Wrap with strings): ' BADCHARS
 			array+=("--bad-chars" "$BADCHARS")
 		else
@@ -153,7 +153,7 @@ more_options() {
 	read -p $'Save output to file? \e[31mY/n\e[0m ' TOFILE
 	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
 
-	if [ $TOFILE = "y" ]; then
+	if [[ $TOFILE == "y" ]]; then
 		to_file "$@" ${array[@]}
 	else
 		execute "$@" ${array[@]}
