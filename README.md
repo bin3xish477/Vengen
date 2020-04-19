@@ -1,2 +1,5 @@
-# Venom-Wrapper
-Msfvenom wrapper
+# Vengen
+A wrapper for msfvenom payload generation.
+
+### Installation
+wget 
