@@ -133,16 +133,16 @@ more_options() {
 	# option and appending flag and value to array.
 	for letter in ${options[@]}; do
 		if [ $letter = "e" ]; then
-			read -p $'ENCODER: ' ENCODER
+			read -p $'\e[31mENCODER\e[0m: ' ENCODER
 			array+=("--encoder" "$ENCODER")
 		elif [ $letter = "a" ]; then
-			read -p $'ARCHITECTURE: ' ARCHITECTURE
+			read -p $'\e[31mARCHITECTURE\e[0m: ' ARCHITECTURE
 			array+=("--arch" "$ARCHITECTURE")
 		elif [ $letter = "p" ]; then
-			read -p $'PLATFORM: ' PLATFORM
+			read -p $'\e[31mPLATFORM\e[0m: ' PLATFORM
 			array+=("--platform" "$PLATFORM")
 		elif [ $letter = "b" ]; then
-			read -p $'BAD CHARACTERS (Wrap with strings): ' BADCHARS
+			read -p $'\e[31mBAD CHARACTERS\e[0m (Wrap with strings): ' BADCHARS
 			array+=("--bad-chars" "$BADCHARS")
 		else
 			echo -e "\e[34mInvalid Option!\e[0m\n"
