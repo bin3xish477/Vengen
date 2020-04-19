@@ -134,16 +134,16 @@ more_options() {
 	for letter in ${options[@]}; do
 		if [ $letter = "e" ]; then
 			read -p $'ENCODER: ' ENCODER
-			array+=("-e" "$ENCODER")
+			array+=("--encoder" "$ENCODER")
 		elif [ $letter = "a" ]; then
 			read -p $'ARCHITECTURE: ' ARCHITECTURE
-			array+=("-a" "$ARCHITECTURE")
+			array+=("--arch" "$ARCHITECTURE")
 		elif [ $letter = "p" ]; then
 			read -p $'PLATFORM: ' PLATFORM
-			array+=("-p" "$PLATFORM")
+			array+=("--platform" "$PLATFORM")
 		elif [ $letter = "b" ]; then
 			read -p $'BAD CHARACTERS (Wrap with strings): ' BADCHARS
-			array+=("-b" "$BADCHARS")
+			array+=("--bad-chars" "$BADCHARS")
 		else
 			echo -e "\e[34mInvalid Option!\e[0m\n"
 			more_options $1 $2 $3 $4
