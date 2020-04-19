@@ -9,13 +9,13 @@
 # ========================================
 
 prompt_main() {
-	read -p $'\e[31m [1] Reverse (2) Bind |3| Exit :\e[0m ' CHOSE
+	read -p $'\e[31m[1] Reverse [2] Bind [3] Exit\e[0m: ' CHOSE
 	# Checking if input is integer
 	# If its not an integer, send the error to /dev/null
 	# and recall the current function
 	if ! [ $CHOSE -eq $CHOSE ] 2>/dev/null
 	then
-		echo -e "\e[34mInvalid option\e[0m -:> $CHOSE"
+		echo -e "\e[34mNumbers please!\e[0m -:> $CHOSE"
 		prompt_main
 	else
 		if [ $CHOSE -eq 1 ]; then
@@ -23,10 +23,11 @@ prompt_main() {
 		elif [ $CHOSE -eq 2 ]; then
 			bind_payload
 		elif [ $CHOSE -eq 3 ]; then
-			echo "Exit Success"
+
+			echo "Goodbye..."
 			exit 0
 		else
-			echo -e "\e[34mInvalid option\e[0m -:> $CHOSE"
+			echo -e "\e[34mInvalid number!\e[0m -:> $CHOSE"
 			prompt_main
 		fi
 	fi
@@ -34,22 +35,27 @@ prompt_main() {
 
 # Generate reverse shell payload
 reverse_payload() {
-	read -p $'\e[31mLHOST:\e[0m ' LOCALIP
-	read -p $'\e[31mLPORT:\e[0m ' LOCALPORT
-	read -p $'\e[31mPAYLOAD:\e[0m ' PAYLOAD
-	read -p $'\e[31mFORMAT:\e[0m ' FORMAT
+	# Reading in mininum arguments for
+	# generating reverse shell payload.
+	read -p $'\e[31mLHOST\e[0m: ' LOCALIP
+	read -p $'\e[31mLPORT\e[0m: ' LOCALPORT
+	read -p $'\e[31mPAYLOAD\e[0m: ' PAYLOAD
+	read -p $'\e[31mFORMAT\e[0m: ' FORMAT
 	echo -ne $'Add more options? \e[31mY/n\e[0m '
 	read MOREOPTS
 
+	# To lowercase
 	MOREOPTS=$(echo $MOREOPTS |tr '[:upper:]' '[:lower:]')
+
 	if [ $MOREOPTS = "y" ]; then
-		more_options LHOST=$LOCALIP LPORT=$LOCALPORT $PAYLOAD $FORMAT
+		more_options -p $PAYLOAD LHOST=$LOCALIP LPORT=$LOCALPORT -f $FORMAT
 	fi
 
 	read -p $'Save output to file? \e[31mY/n\e[0m' TOFILE
 	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
+
 	if [ $TOFILE = "y" ]; then
-		to_file $LOCALIP $LOCALPORT $PAYLOAD $FORMAT
+		to_file -p $PAYLOAD LHOST=$LOCALIP LPORT=$LOCALPORT -f $FORMAT
 	else
 		execute -p $PAYLOAD LHOST=$LOCALIP LPORT=$LOCALPORT -f $FORMAT
 	fi
@@ -57,24 +63,28 @@ reverse_payload() {
 
 # Generate bind shell payload
 bind_payload() {
-	read -p $'\e[31mRHOST:\e[0m ' REMOTEIP
-	read -p $'\e[31mRPORT:\e[0m ' REMOTEPORT
-	read -p $'\e[31mPAYLOAD:\e[0m ' PAYLOAD
-	read -p $'\e[31mFORMAT:\e[0m ' FORMAT
-	echo -ne $'Add more options? \e[31mY/n\e[0m '
+	# Reading in mininum arguments for
+	# generating bind shell payload.
+	read -p $'\e[31mRHOST\e[0m: ' REMOTEIP
+	read -p $'\e[31mRPORT\e[0m: ' REMOTEPORT
+	read -p $'\e[31mPAYLOAD\e[0m: ' PAYLOAD
+	read -p $'\e[31mFORMAT\e[0m: ' FORMAT
+	echo -ne $'Add more opions? \e[31mY/n\e[0m '
 	read MOREOPTS
 
 	MOREOPTS=$(echo $MOREOPTS | tr '[:upper:]' '[:lower:]')
+
 	if [ $MOREOPTS = "y" ]; then
-		more_options RHOST=$REMOTEIP RPORT=$REMOTEPORT $PAYLOAD $FORMAT
+		more_options -p $PAYLOAD RHOST=$REMOTEIP RPORT=$REMOTEPORT -f $FORMAT
 	fi
 
 	read -p $'Save output to file? \e[31mY/n\e[0m' TOFILE
 	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
+
 	if [ $TOFILE = "y" ]; then
-		to_file $LOCALIP $LOCALPORT $PAYLOAD $FORMAT
+		to_file -p $REMOTEIP RHOST=$REMOTEPORT RHOST=$PAYLOAD -f $FORMAT
 	else
-		execute -p $PAYLOAD LHOST=$REMOTEIP LPORT=$REMOTEPORT -f $FORMAT
+		execute -p $PAYLOAD RHOST=$REMOTEIP RPORT=$REMOTEPORT -f $FORMAT
 	fi
 }
 
@@ -82,51 +92,72 @@ bind_payload() {
 # command with file output option
 to_file() {
 	read -p $'\e[34mEnter File Name:\e[0m ' FILENAME
+
+	# Checking if file exists
+	# If it does prompt user to overwrite,
+	# else if it does not exist continue to
+	# execution of command.
 	if [ -e FILENAME ]; then
 		echo "File already exits!"
 		read -p $'Overwrite file? \e[31mY/n\e[0m' OVERWRITE
 		OVERWRITE=$(echo $OVERWRITE |tr '[:upper:]' '[:lower:]')
+
 		if [ $OVERWRITE = "y"]; then
-			execute -p $3 LHOST=$1 LPORT=$2 -f $4 -o ${FILENAME}
+			execute "$@" -o ${FILENAME}
 		else
 			exit 0
 		fi
 	else
-		execute -p $3 LHOST=$1 LPORT=$2 -f $4 -o ${FILENAME}
+		execute "$@" -o ${FILENAME}
 	fi
 }
 
 # Shows other options to enter for msfvenom
 more_options() {
 	array=()
-	echo -e "\nOptions:
+	echo -n "############################"
+	echo -e "\n\e[32mOptions\e[0m:
 	[e] Encoder
 	[a] Architecture
 	[p] Platform
 	[b] Bad Characters
 	"
-	echo -ne "\e[31mEnter your options seperated by spaces:\e[0m "
+	echo "############################"
+
+	echo -ne "\e[31mEnter letter/s (Seperate with spaces)\e[0m: "
+	# Reading elements seperated by spaces into an array.
 	read -a options
+
+	# Iterating over array elements.
+	# Prompting user for value corresponding to
+	# option and appending flag and value to array.
 	for letter in ${options[@]}; do
 		if [ $letter = "e" ]; then
 			read -p $'ENCODER: ' ENCODER
 			array+=("-e" "$ENCODER")
 		elif [ $letter = "a" ]; then
 			read -p $'ARCHITECTURE: ' ARCHITECTURE
-			array+=("-e" "$ARCHITECTURE")
+			array+=("-a" "$ARCHITECTURE")
 		elif [ $letter = "p" ]; then
 			read -p $'PLATFORM: ' PLATFORM
-			array+=("-e" "$PLATFORM")
+			array+=("-p" "$PLATFORM")
 		elif [ $letter = "b" ]; then
-			read -p $'BAD CHARACTERS' BADCHARS
-			array+=("-e" "$BADCHARS")
+			read -p $'BAD CHARACTERS (Wrap with strings): ' BADCHARS
+			array+=("-b" "$BADCHARS")
 		else
 			echo -e "\e[34mInvalid Option!\e[0m\n"
 			more_options $1 $2 $3 $4
 		fi
 	done
 
-	execute $1 $2 $3 $4 "$@"
+	read -p $'Save output to file? \e[31mY/n\e[0m ' TOFILE
+	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
+
+	if [ $TOFILE = "y" ]; then
+		to_file "$@" ${array[@]}
+	else
+		execute "$@" ${array[@]}
+	fi
 }
 
 # Will execute the final msfvenom command
@@ -137,10 +168,15 @@ execute() {
 
 # Print program name
 prog_name() {
-	echo " -------------------------------"
-	echo -e "|            \e[32mVengen\e[0m             |"
-	echo -e "| 	 by: \e[33mBinexisHATT\e[0m        |"
-	echo " -------------------------------"
+	echo -e "
+██╗   ██╗███████╗███╗   ██╗ ██████╗ ███████╗███╗   ██╗
+██║   ██║██╔════╝████╗  ██║██╔════╝ ██╔════╝████╗  ██║
+██║   ██║█████╗  ██╔██╗ ██║██║  ███╗█████╗  ██╔██╗ ██║
+╚██╗ ██╔╝██╔══╝  ██║╚██╗██║██║   ██║██╔══╝  ██║╚██╗██║
+ ╚████╔╝ ███████╗██║ ╚████║╚██████╔╝███████╗██║ ╚████║
+  ╚═══╝  ╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝
+					\e[34m@BinexisHATT\e[0m                                             
+"
 }
 
 main() {
