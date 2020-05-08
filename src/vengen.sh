@@ -121,6 +121,7 @@ to_file() {
 # Shows other options to enter for msfvenom
 more_options() {
 	ARRAY=()
+
 	echo -e "\n[###############################]"
 	echo -e "\n\e[32mOptions\e[0m:
 	[\e[1;31me\e[0m] Encoder
@@ -130,7 +131,6 @@ more_options() {
 	[\e[1;95mc\e[0m] Custom Options
 	"
 	echo -e "[###############################]\n"
-
 
 	echo -ne "\e[31mEnter letter/s\e[0m (Seperate with spaces): "
 	# Reading elements seperated by spaces into an array.
