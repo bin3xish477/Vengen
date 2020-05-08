@@ -1,21 +1,24 @@
 #!/bin/bash
 
-# ========================================
+# #########################################
 # Author: Alexis Rodriguez
 # Date: 18 April 2020
 # Vengen is a wrapper for msfvenom. It's 
 # purpose is to make generating payloads
 # with msfvenom easier and quicker.
-# ========================================
+# #########################################
 
 prompt_main() {
-	read -p $'\e[31m[1] Reverse [2] Bind [3] Exit\e[0m: ' CHOSE
+	read -p $'\e[31m[1] Reverse [2] Bind [3] Exit [4] Clear Screen\e[0m: ' CHOSE
 	# Checking if input is integer
 	# If its not an integer, send the error to /dev/null
 	# and recall the current function
 	if ! [ $CHOSE -eq $CHOSE ] 2>/dev/null
 	then
-		echo -e "\e[34mNumbers please!\e[0m -:> $CHOSE"
+		echo -e "\e[34mNumbers please!\e[0m -:> $CHOSE is not a number..."
+		prompt_main
+	elif [ -z $CHOSE ]; then
+		echo -e "\e[34mYou did not select an option...\e[0m"
 		prompt_main
 	else
 		if [ $CHOSE -eq 1 ]; then
@@ -25,6 +28,9 @@ prompt_main() {
 		elif [ $CHOSE -eq 3 ]; then
 			echo "Goodbye..."
 			exit 0
+		elif [ $CHOSE -eq 4 ]; then
+			clear
+			prompt_main
 		else
 			echo -e "\e[34mInvalid number!\e[0m -:> $CHOSE"
 			prompt_main
@@ -114,15 +120,17 @@ to_file() {
 
 # Shows other options to enter for msfvenom
 more_options() {
-	array=()
-	echo -n "############################"
+	ARRAY=()
+	echo -e "\n[###############################]"
 	echo -e "\n\e[32mOptions\e[0m:
-	[e] Encoder
-	[a] Architecture
-	[p] Platform
-	[b] Bad Characters
+	[\e[1;31me\e[0m] Encoder
+	[\e[1;32ma\e[0m] Architecture
+	[\e[1;33mp\e[0m] Platform
+	[\e[1;34mb\e[0m] Bad Characters
+	[\e[1;95mc\e[0m] Custom Options
 	"
-	echo "############################"
+	echo -e "[###############################]\n"
+
 
 	echo -ne "\e[31mEnter letter/s\e[0m (Seperate with spaces): "
 	# Reading elements seperated by spaces into an array.
@@ -131,19 +139,22 @@ more_options() {
 	# Iterating over array elements.
 	# Prompting user for value corresponding to
 	# option and appending flag and value to array.
-	for letter in ${options[@]}; do
-		if [[ $letter == "e" ]]; then
+	for LETTER in ${options[@]}; do
+		if [[ $LETTER == "e" ]]; then
 			read -p $'\e[31mENCODER\e[0m: ' ENCODER
-			array+=("--encoder" "$ENCODER")
-		elif [[ $letter == "a" ]]; then
+			ARRAY+=("--encoder" "$ENCODER")
+		elif [[ $LETTER == "a" ]]; then
 			read -p $'\e[31mARCHITECTURE\e[0m: ' ARCHITECTURE
-			array+=("--arch" "$ARCHITECTURE")
-		elif [[ $letter == "p" ]]; then
+			ARRAY+=("--arch" "$ARCHITECTURE")
+		elif [[ $LETTER == "p" ]]; then
 			read -p $'\e[31mPLATFORM\e[0m: ' PLATFORM
-			array+=("--platform" "$PLATFORM")
-		elif [[ $letter == "b" ]]; then
+			ARRAY+=("--platform" "$PLATFORM")
+		elif [[ $LETTER == "b" ]]; then
 			read -p $'\e[31mBAD CHARACTERS\e[0m (Wrap with strings): ' BADCHARS
-			array+=("--bad-chars" "$BADCHARS")
+			ARRAY+=("--bad-chars" "$BADCHARS")
+		elif [[ $LETTER == "c" ]]; then
+			read -p $'\e[31mEnter your options\e[0m (Seperate with spaces): ' CUSTOM
+			ARRAY+=("$CUSTOM")
 		else
 			echo -e "\e[34mInvalid Option!\e[0m\n"
 			more_options $1 $2 $3 $4
@@ -154,9 +165,9 @@ more_options() {
 	TOFILE=$(echo $TOFILE |tr '[:upper:]' '[:lower:]')
 
 	if [[ $TOFILE == "y" ]]; then
-		to_file "$@" ${array[@]}
+		to_file "$@" ${ARRAY[@]}
 	else
-		execute "$@" ${array[@]}
+		execute "$@" ${ARRAY[@]}
 	fi
 }
 
