@@ -23,7 +23,6 @@ prompt_main() {
 		elif [ $CHOSE -eq 2 ]; then
 			bind_payload
 		elif [ $CHOSE -eq 3 ]; then
-
 			echo "Goodbye..."
 			exit 0
 		else
@@ -71,7 +70,8 @@ bind_payload() {
 	read -p $'\e[31mFORMAT\e[0m: ' FORMAT
 	echo -ne $'Add more opions? \e[31mY/n\e[0m '
 	read MOREOPTS
-
+	
+	# To lowercase
 	MOREOPTS=$(echo $MOREOPTS | tr '[:upper:]' '[:lower:]')
 
 	if [[ $MOREOPTS == "y" ]]; then
