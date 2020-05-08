@@ -15,7 +15,7 @@ then
   sleep 1
   ln ./src/vengen.sh /bin/vengen
   sleep 1
-  rm install.sh
+  rm ../install.sh
 else
   echo "Git needs to be installed for this installation... Please install it!"
 fi
