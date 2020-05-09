@@ -1,5 +1,4 @@
 # Vengen
-A wrapper for msfvenom payload generation.
 ![vengen](vengen_screenshot.png)
 ### Installation
 ```bash
