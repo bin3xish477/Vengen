@@ -97,7 +97,7 @@ bind_payload() {
 # Gets file name to write and executes msfvenom 
 # command with file output option
 to_file() {
-	read -p $'\e[34mEnter File Name:\e[0m ' FILENAME
+	read -p $'\e[94mEnter File Name:\e[0m ' FILENAME
 
 	# Checking if file exists
 	# If it does prompt user to overwrite,
@@ -186,7 +186,7 @@ prog_name() {
 ╚██╗ ██╔╝██╔══╝  ██║╚██╗██║██║   ██║██╔══╝  ██║╚██╗██║
  ╚████╔╝ ███████╗██║ ╚████║╚██████╔╝███████╗██║ ╚████║
   ╚═══╝  ╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝
-					\e[34m@BinexisHATT\e[0m                                             
+					\e[94m@BinexisHATT\e[0m                                             
 "
 }
 
