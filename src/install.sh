@@ -13,8 +13,6 @@ then
   git clone https://github.com/binexisHATT/Vengen.git
   sleep 2
   sudo ln -s /opt/Vengen/src/vengen.sh /bin/vengen
-  sleep 1
-  rm ./install.sh
 else
   echo "Git needs to be installed for this installation... Please install it!"
 fi
