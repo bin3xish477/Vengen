@@ -9,10 +9,10 @@ git_version_status=$?
 
 if [ $git_version_status -eq 0 ];
 then
-  cd ~/Downloads
+  cd /opt
   git clone https://github.com/binexisHATT/Vengen.git
   sleep 2
-  sudo ln -s ~/Downloads/Vengen/src/vengen.sh /bin/vengen
+  sudo ln -s /opt/Vengen/src/vengen.sh /bin/vengen
   sleep 1
   rm ./install.sh
 else
