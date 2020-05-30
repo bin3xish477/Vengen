@@ -99,7 +99,7 @@ list_payloads() {
 	while read LINE
 	do
 		echo $LINE
-	done < payloads.txt	
+	done < /opt/Vengen/src/payloads.txt
 }
 
 # Gets file name to write and executes msfvenom 
