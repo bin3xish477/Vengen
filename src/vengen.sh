@@ -9,7 +9,7 @@
 # #########################################
 
 prompt_main() {
-	read -p $'\e[31m[1] Reverse [2] Bind [3] Exit [4] Clear Screen\e[0m: ' CHOSE
+	read -p $'\e[31m[1] Reverse [2] Bind [3] List Payloads [4] Exit\e[0m: ' CHOSE
 	# Checking if input is integer
 	# If its not an integer, send the error to /dev/null
 	# and recall the current function
@@ -17,20 +17,20 @@ prompt_main() {
 	then
 		echo -e "\e[34mNumbers please!\e[0m -:> $CHOSE is not a number..."
 		prompt_main
-	elif [ -z $CHOSE ]; then
+	elif [[ -z $CHOSE ]]; then
 		echo -e "\e[34mYou did not select an option...\e[0m"
 		prompt_main
 	else
-		if [ $CHOSE -eq 1 ]; then
+		if [[ $CHOSE -eq 1 ]]; then
 			reverse_payload
-		elif [ $CHOSE -eq 2 ]; then
+		elif [[ $CHOSE -eq 2 ]]; then
 			bind_payload
-		elif [ $CHOSE -eq 3 ]; then
+		elif [[ $CHOSE -eq 3 ]]; then
+			list_payloads
+			prompt_main
+		elif [[ $CHOSE -eq 4 ]]; then
 			echo "Goodbye..."
 			exit 0
-		elif [ $CHOSE -eq 4 ]; then
-			clear
-			prompt_main
 		else
 			echo -e "\e[34mInvalid number!\e[0m -:> $CHOSE"
 			prompt_main
@@ -92,6 +92,14 @@ bind_payload() {
 	else
 		execute -p $PAYLOAD RHOST=$REMOTEIP RPORT=$REMOTEPORT -f $FORMAT
 	fi
+}
+
+# List the payloads available for generate with msfvenom
+list_payloads() {
+	while read LINE
+	do
+		echo $LINE
+	done < payloads.txt	
 }
 
 # Gets file name to write and executes msfvenom 
@@ -196,3 +204,4 @@ main() {
 }
 
 main
+
